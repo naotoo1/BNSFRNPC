@@ -1,0 +1,11 @@
+numpy
+scikit-learn
+torch
+pytorch-lightning==2.0.2
+prototorch==0.7.6
+prototorch_models==0.7.1
+foolbox
+prosemble
+keras
+tensorflow
+eagerpy
