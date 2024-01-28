@@ -26,12 +26,13 @@ To install the Python requirements use the following command:
 pip install -r requirements.txt 
 ```
 
-To replicate percetual-pruning and perceptual-training for cifar-10 run the default parameters:
+To replicate percetual-pruning and perceptual-training for cifar-10 run:
 ```python
-python train.py --data_name cifar10 --model iglvq --max_epochs 100 --device gpu --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode easy --prune_fraction 0.8 --num_proto 2 
-python train.py --data_name cifar10 --model iglvq --max_epochs 100 --device gpu --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode hard --prune_fraction 0.2 --num_proto 2 
+python train.py --data_name cifar10 --model iglvq --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode easy --prune_fraction 0.8 
+python train.py --data_name cifar10 --model igtlvq --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode hard --prune_fraction 0.2  
 ```
 
+Users interested in replicating the results in the paper can run with the reported parematers in the paper by using:
 
 ```python
 usage: train.py [-h] [--model MODEL] [--data_name DATA_NAME] [--test_size TEST_SIZE] [--train_norm TRAIN_NORM]
@@ -40,4 +41,10 @@ usage: train.py [-h] [--model MODEL] [--data_name DATA_NAME] [--test_size TEST_S
                 [--num_proto NUM_PROTO] [--prune_fraction PRUNE_FRACTION] [--prune_mode PRUNE_MODE]
                 [--feature_extraction] [--prune] [--max_epochs MAX_EPOCHS] [--proto_lr PROTO_LR] [--omega_lr OMEGA_LR]
                 [--noise NOISE]
+```
+
+To do post-training evaluation with pretained-models:
+```python
+usage: evaluate_script.py [-h] [--model MODEL] [--dataset DATASET] [--test_size TEST_SIZE] [--p_norm P_NORM]
+                          [--metric METRIC] [--epsilon EPSILON] [--train_norm TRAIN_NORM]
 ```
