@@ -188,7 +188,6 @@ def min_max_scaler(train_data, test_data):
     test_data = (test_data - input_space_min) / (input_space_max - input_space_min)
     return train_data, test_data
 
-
 class DATA:
     def __init__(
         self,

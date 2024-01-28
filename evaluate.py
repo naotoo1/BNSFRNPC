@@ -307,7 +307,6 @@ def get_certification_norms(input_norm: str):
                 "or lpips-l2 and lpips-l1 for semi-metric"
             )
 
-
 @dataclass(slots=True)
 class LPN:
     lp_norm: str

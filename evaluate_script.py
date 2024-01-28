@@ -119,7 +119,6 @@ class EER:
 
 if __name__ == "__main__":
     seed_everything(seed=4)
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, required=False)
     parser.add_argument(

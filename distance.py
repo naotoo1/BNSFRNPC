@@ -223,6 +223,5 @@ def lpips_distance(
                 x=activations_x,
                 y=activations_y,
             )
-
         case _:
             raise NotImplemented("Use l2, l1, linf or sqr")

@@ -57,7 +57,6 @@ def get_extracted_image_features_perceptual_(
         features = model.classifier(l5)
         extracted_features.append(features)
         image_name.append(image_index)
-    print("done")
     return ExtractedFeatures(
         features=extracted_features,
         image_names=image_name,
@@ -77,7 +76,6 @@ def get_extracted_image_features_perceptual1(
         activations_x = normalize_flatten_features(features)
         extracted_features.append(activations_x)
         image_name.append(image_index)
-    print("done")
     return ExtractedFeatures(
         features=extracted_features,
         image_names=image_name,

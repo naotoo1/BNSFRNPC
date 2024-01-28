@@ -201,7 +201,6 @@ class LPN:
                     "get_lpnorms:none of the cases did match",
                 )
 
-
 def rnpc(
     model: str,
     train_ds: data.TensorDataset,

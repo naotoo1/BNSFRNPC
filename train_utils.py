@@ -8,7 +8,6 @@ from sklearn.preprocessing import MinMaxScaler
 import torch
 from data import DATA, Sampling
 from bns import SSLType, PruneMode
-
 from data_prune import get_prune_data
 
 
