@@ -11,6 +11,11 @@ from tqdm import tqdm
 from keras.applications import ResNet152V2
 from keras.applications.resnet_v2 import preprocess_input
 
+from distance import (
+    _get_lpips_model,
+    normalize_flatten_features,
+)
+
 
 @dataclass
 class ExtractedFeatures:
@@ -39,6 +44,46 @@ def get_extracted_image_features(
     )
 
 
+def get_extracted_image_features_perceptual_(
+    dataset: torch.Tensor,
+) -> ExtractedFeatures:
+    extracted_features, image_name = [], []
+    model = _get_lpips_model()
+    model = model.to(torch.device("cpu"))
+    dataset = dataset.permute(0, 3, 2, 1)
+
+    for image_index in tqdm(dataset):
+        l1, l2, l3, l4, l5 = model.features(image_index)
+        features = model.classifier(l5)
+        extracted_features.append(features)
+        image_name.append(image_index)
+    print("done")
+    return ExtractedFeatures(
+        features=extracted_features,
+        image_names=image_name,
+    )
+
+
+def get_extracted_image_features_perceptual1(
+    dataset: torch.Tensor,
+) -> ExtractedFeatures:
+    extracted_features, image_name = [], []
+    model = _get_lpips_model()
+    model = model.to(torch.device("cpu"))
+    dataset = dataset.permute(0, 3, 2, 1)
+
+    for image_index in tqdm(dataset):
+        features = model.features(image_index)
+        activations_x = normalize_flatten_features(features)
+        extracted_features.append(activations_x)
+        image_name.append(image_index)
+    print("done")
+    return ExtractedFeatures(
+        features=extracted_features,
+        image_names=image_name,
+    )
+
+
 def get_prune_data(
     data_name: str,
     dataset,
@@ -52,7 +97,7 @@ def get_prune_data(
 ):
     match (data_name, feature_extraction):
         case ("cifar10", True):
-            data_features = get_extracted_image_features(
+            data_features = get_extracted_image_features_perceptual1(
                 dataset=dataset,
             ).features
         case _:

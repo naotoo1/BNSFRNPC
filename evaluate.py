@@ -7,6 +7,7 @@ from prototorch.core.distances import (
     squared_euclidean_distance,
     lpnorm_distance,
 )
+from distance import lpips_distance
 import torch
 
 
@@ -30,6 +31,7 @@ def get_lowerbound_certification(
     labels: torch.LongTensor,
     epsilon: float,
     p_norm: int | str,
+    q_norm: int | str,
     device: str = "cpu",
 ) -> LowerBoundRTM:
     # load model if any or live certification
@@ -40,11 +42,20 @@ def get_lowerbound_certification(
         case _:
             pass
 
+    condition1 = q_norm in ["lpips-linf", "lpips-l2", "lpips-l1"]
+    match condition1:
+        case True:
+            device = "cuda"
+        case False:
+            device = "cpu"
+
     fmodel = pytorch.PyTorchModel(
         model=model,
         bounds=(0, 1),
         device=device,
     )
+    data = data.to(device)
+    labels = labels.to(device)
     clean_acc = accuracy(fmodel, data, labels)
 
     # setup attacks
@@ -89,9 +100,20 @@ def get_upperbound_certification(
     epsilon: float,
     p_norm: str | int | None = None,
     q_norm: str | int | None = None,
+    device: str = "cpu",
 ) -> float:
-    match p_norm:
-        case "l2":
+    condition1 = q_norm in ["lpips-linf", "lpips-l2", "lpips-l1"]
+    match condition1:
+        case True:
+            device = "cuda"
+        case False:
+            device = "cpu"
+
+    x_test = x_test.to(device)
+    prototypes = prototypes.to(device)
+
+    match (condition1, p_norm):
+        case (False, "l2"):
             distance_space = lpnorm_distance(
                 x=x_test,
                 y=prototypes,
@@ -109,7 +131,7 @@ def get_upperbound_certification(
             score = len(urte) / len(x_test)
             return round(score, 4)
 
-        case "linf":
+        case (False, "linf"):
             distance_space = lpnorm_distance(
                 x=x_test,
                 y=prototypes,
@@ -128,7 +150,7 @@ def get_upperbound_certification(
             score = len(urte) / len(x_test)
             return round(score, 4)
 
-        case "l1":
+        case (False, "l1"):
             distance_space = lpnorm_distance(
                 x=x_test,
                 y=prototypes,
@@ -147,7 +169,7 @@ def get_upperbound_certification(
             score = len(urte) / len(x_test)
             return round(score, 4)
 
-        case None:
+        case (False, None):
             distance_space = squared_euclidean_distance(
                 x=x_test,
                 y=prototypes,
@@ -163,9 +185,63 @@ def get_upperbound_certification(
             )
             score = len(urte) / len(x_test)
             return round(score, 4)
+        case (True, "l2"):  # use stable version only
+            distance_space = lpips_distance(
+                x=x_test,
+                y=prototypes,
+                p="l2",
+            )
+
+            urte = get_urte(
+                distance_space=distance_space,
+                labels=labels,
+                ppc=ppc,
+                epsilon=epsilon,
+                p_norm=p_norm,
+                q_norm=q_norm,
+                x_test=x_test,
+            )
+            score = len(urte) / len(x_test)
+            return round(score, 4)
+        case (True, "l1"):  # only to investiage numerical stability
+            distance_space = lpips_distance(
+                x=x_test,
+                y=prototypes,
+                p="l1",
+            )
+            urte = get_urte(
+                distance_space=distance_space,
+                labels=labels,
+                ppc=ppc,
+                epsilon=epsilon,
+                p_norm=p_norm,
+                q_norm=q_norm,
+                x_test=x_test,
+            )
+            score = len(urte) / len(x_test)
+            return round(score, 4)
+
+        case (True, "linf"):  # only to investigate numerical stability
+            distance_space = lpips_distance(
+                x=x_test,
+                y=prototypes,
+                p="linf",
+            )
+            urte = get_urte(
+                distance_space=distance_space,
+                labels=labels,
+                ppc=ppc,
+                epsilon=epsilon,
+                p_norm=p_norm,
+                q_norm=q_norm,
+                x_test=x_test,
+            )
+            score = len(urte) / len(x_test)
+            return round(score, 4)
+
         case _:
             raise NotImplementedError(
-                "compute the closest distance: use l2, linf or l1 as  pnorm"
+                "compute the closest distance: use l2, linf or l1 norm"
             )
 
 
@@ -219,8 +295,17 @@ def get_certification_norms(input_norm: str):
             return 2
         case "linf":
             return float("inf")
+        case "lpips-l2":
+            return 2
+        case "lpips-l1":
+            return 1
+        case "lpips-linf":
+            return float("inf")
         case _:
-            raise NotImplementedError("use either l1,l2 or linf")
+            raise NotImplementedError(
+                "use either l1,l2 and linf for arbitrary semi-norms"
+                "or lpips-l2 and lpips-l1 for semi-metric"
+            )
 
 
 @dataclass(slots=True)
@@ -235,6 +320,12 @@ class LPN:
                 return lpnorm_distance(x, y, float("inf"))
             case "l1":
                 return lpnorm_distance(x, y, 1)
+            case "lpips-l2":
+                return lpips_distance(x, y, "l2")  # semi_metric stable version
+            case "lpips-l1":
+                return lpips_distance(x, y, "l1")  # semi-metric
+            case "lpips-linf":
+                return lpips_distance(x, y, "linf")  # semi-metric
             case _:
                 raise NotImplementedError(
                     "get_lpnorms:none of the cases did match",

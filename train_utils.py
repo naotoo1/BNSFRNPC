@@ -164,16 +164,16 @@ def get_prunning(
     prune_mode: str = PruneMode.EASY,
     feature_extraction: bool = True,
 ) -> EasyPrunedSpace | HardPrunedSpace | PrunedSpace:
-    input_features = input_features.detach().cpu().numpy()
-
-    prune_indices = get_prune_data(
-        data_name=dataset,
-        dataset=input_features,
-        labels=input_labels,
-        ssl_type=ssl_type,
-        prune_fraction=prune_fraction,
-        feature_extraction=feature_extraction,
-    )
+    with torch.no_grad():
+        # input_features = input_features.detach().cpu().numpy()
+        prune_indices = get_prune_data(
+            data_name=dataset,
+            dataset=input_features,
+            labels=input_labels,
+            ssl_type=ssl_type,
+            prune_fraction=prune_fraction,
+            feature_extraction=feature_extraction,
+        )
     match prune_mode:
         case PruneMode.EASY:
             return EasyPrunedSpace(
@@ -208,4 +208,4 @@ def seed_everything(seed: int):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = True
+    torch.backends.cudnn.benchmark = False
