@@ -1,4 +1,5 @@
 # BNSFRNPC
+[Nana A. Otoo](https://github.com/naotoo1)
 This repository contains the code for the paper Beyond Neural Scaling Laws For Fast Proven Robust Certification Of Nearest Prototype Classifiers
 
 ## Abstract
