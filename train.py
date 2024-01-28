@@ -9,6 +9,7 @@ import prototorch.models as ps
 import prototorch as pt
 from prototorch.core import lpnorm_distance
 from prototorch.models.extras import ltangent_distance
+from distance import lpips_distance
 import pytorch_lightning as pl
 import torch
 from lightning_fabric.utilities.warnings import PossibleUserWarning
@@ -46,6 +47,8 @@ class LPNorms(str, Enum):
     L1 = "l1"
     L2 = "l2"
     LINF = "linf"
+    LPIPS_L1 = "lpips-l1"
+    LPIPS_L2 = "lpips-l2"
 
 
 class TransferFunctions(str, Enum):
@@ -187,6 +190,12 @@ class LPN:
                 return lpnorm_distance(x, y, float("inf"))
             case "l1":
                 return lpnorm_distance(x, y, 1)
+            case "lpips-l2":
+                return lpips_distance(x, y, "l2")
+            case "lpips-l1":
+                return lpips_distance(x, y, "l1")
+            case "lpips-linf":
+                return lpips_distance(x, y, "linf")
             case _:
                 raise NotImplementedError(
                     "get_lpnorms:none of the cases did match",
@@ -447,7 +456,7 @@ if __name__ == "__main__":
         case False:
             x_train, y_train = access_data.X_train, access_data.y_train
 
-    tabular_data = [Dataset.BREASTCANCER, Dataset.COD_RNA]
+    tabular_data = [Dataset.BREASTCANCER.value, Dataset.COD_RNA.value]
     omega_matrix_initializer = (
         omega_matrix_initializer if data_name in tabular_data else "PCALTI"
     )
@@ -490,6 +499,7 @@ if __name__ == "__main__":
         labels=y_test,
         epsilon=test_epsilon,
         p_norm=test_norm,
+        q_norm=train_norm,
     )
 
     print("ROBUST EVALUATION SCORES")

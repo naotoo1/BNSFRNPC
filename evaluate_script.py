@@ -89,6 +89,7 @@ class EER:
             labels=test_set.y_test,
             epsilon=self.epsilon,
             p_norm=self.p_norm,
+            q_norm=self.q_norm,
         )
         return LowerBoundRTM(
             LRTE=metric.LRTE,
