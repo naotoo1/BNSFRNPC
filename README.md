@@ -7,18 +7,18 @@ This repository contains the code for the paper Beyond Neural Scaling Laws For F
 Methods beyond neural scaling laws for beating power scaling laws in machine learning have
 become topical for high-performance machine learning models. Nearest Prototype Classifiers (NPCs)
 introduce a category of machine learning models known for their interpretability, but the performance
-of NPCs are frequently impacted by large datasets that scale to high dimensions. We overcome the low-
-performance hurdle by utilizing self-supervised prototype-based learning metrics to prune datasets of
-large-size of either low or high dimension for the robustification and certification of NPCs within
-the scope of the Learning Vector Quantization (LVQ) family of algorithms based on the Crammer
-normalization for arbitrary semi-norms (semi-metrics). The numerical evaluation of outcomes reveals
-that NPCs trained with pruned datasets demonstrate sustained and enhanced performance compared to
-instances where training is conducted with full datasets. The self-supervised prototype-based metric
-(SSL) and the Perceptual-SSL (P-SSL) utilized in this study remains unaffected by the intricacies
-of optimal hyperparameter selection. Consequently, it can be seamlessly integrated with triplet loss
-training to assess the empirical and guaranteed robustness of Lp-NPCs and Perceptual-NPCs (P-
-NPCs), facilitating the curation of meticulously chosen datasets that contribute to technical research
-in applied machine learning
+of NPCs are frequently impacted by large datasets that scale to high dimensions. We surmount the low-
+performance hurdle by employing self-supervised prototype-based learning metrics to intelligently
+prune datasets of varying sizes, encompassing both low and high dimensions. This process aims at
+enhancing the robustification and certification of NPCs within the framework of the Learning Vector
+Quantization (LVQ) family of algorithms, utilizing Crammer normalization for arbitrary semi-norms
+(semi-metrics). The numerical evaluation of outcomes reveals that NPCs trained with pruned datasets
+demonstrate sustained and enhanced performance compared to instances where training is conducted
+with full datasets. The self-supervised prototype-based metric (SSL) and the Perceptual-SSL (P-SSL)
+utilized in this study remains unaffected by the intricacies of optimal hyperparameter selection.
+Consequently, it can be seamlessly integrated with triplet loss training to assess the empirical and
+guaranteed robustness of Lp-NPCs and Perceptual-NPCs (P-NPCs), facilitating the curation of
+meticulously chosen datasets that contribute to technical research in applied machine learning.
 
 The implementation requires Python >=3.11 . The author recommends to use a virtual environment or Docker image.
 The details of the implementation and results evaluation can be found in the paper.
