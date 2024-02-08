@@ -24,6 +24,9 @@ def test_lpips_distance():
 
     perceptual_metric = lpips_distance(input_0, input_1, p="l2")
     perceptual_metric_symmetry = lpips_distance(input_1, input_0, p="l2")
+    perceptual_metric_t_1 = lpips_distance(input_0, input_2, p="l2")
+    perceptual_metric_t_2 = lpips_distance(input_1, input_2, p="l2")
 
     assert perceptual_metric > 0
     assert perceptual_metric == perceptual_metric_symmetry
+    assert perceptual_metric_t_1 <= perceptual_metric + perceptual_metric_t_2
