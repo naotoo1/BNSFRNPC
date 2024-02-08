@@ -4,6 +4,25 @@
 This repository contains the code for the paper Beyond Neural Scaling Laws For Fast Proven Robust Certification Of Nearest Prototype Classifiers.
 
 
+# ABSTRACT
+Methods beyond neural scaling laws for beating power scaling laws in machine learning have
+become topical for high-performance machine learning models. Nearest Prototype Classifiers (NPCs)
+introduce a category of machine learning models known for their interpretability. However, the
+performance of NPCs is frequently impacted by large datasets that scale to high dimensions. We
+surmount the performance hurdle by employing self-supervised prototype-based learning metrics to
+intelligently prune datasets of varying sizes, encompassing low and high dimensions. This process
+aims to enhance the robustification and certification of NPCs within the framework of the Learning
+Vector Quantization (LVQ) family of algorithms, utilizing Crammer normalization for arbitrary
+semi-norms (semi-metrics). The numerical evaluation of outcomes reveals that NPCs trained with
+pruned datasets demonstrate sustained or enhanced performance compared to instances where training
+is conducted with full datasets. The self-supervised prototype-based metric (SSL) and the Perceptual-
+SSL (P-SSL) utilized in this study remain unaffected by the intricacies of optimal hyperparameter
+selection. Consequently, data pruning metrics can be seamlessly integrated with triplet loss training
+to assess the empirical and guaranteed robustness of Lp -NPCs and Perceptual-NPCs (P-NPCs),
+facilitating the curation of datasets that contribute to research in applied machine learning.
+
+
+
 The implementation requires Python >=3.11 . The author recommends to use a virtual environment or Docker image.
 The details of the implementation and results evaluation can be found in the paper.
 
