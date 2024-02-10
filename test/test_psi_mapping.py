@@ -23,11 +23,7 @@ x = input_0.permute(0, 3, 2, 1)
 features = model.features(x)
 
 
-<<<<<<< HEAD
-class TestVARPHI(unittest.TestCase):
-=======
 class TestPSI(unittest.TestCase):
->>>>>>> ed28590e6f04c3cdc01383cac3354f07cea50e0a
     def setUp(self):
         self.features: Tuple[torch.Tensor, ...] = features
         self.epsilon: float = 1e-10
@@ -75,7 +71,6 @@ class TestPSI(unittest.TestCase):
             self.assertEqual(norm_factor.shape[0], 1)
             self.assertEqual(len(norm_factor.size()), 4)
 
-<<<<<<< HEAD
     def test_channel_wise_normalization(self):
         for feature_layer in features:
             normalization_factor_1 = (
@@ -98,7 +93,5 @@ class TestPSI(unittest.TestCase):
             self.assertIsInstance(flattened_normalised_channels, torch.Tensor)
             self.assertEqual(flattened_normalised_channels.shape[0], 1)
 
-=======
->>>>>>> ed28590e6f04c3cdc01383cac3354f07cea50e0a
     def tearDown(self):
         del self.features, self.epsilon
