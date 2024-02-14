@@ -26,9 +26,9 @@ jobs:
                   python-version: ${{ matrix.config.py }}
             - name: Install dependencies
               run: |
+                  python -m pip install --upgrade pip
                   pip install --user -r requirements.txt
                   pip install --user -r requirements_dev.txt
-                  pip install .
             - name: Module-TEST
               run: |
                   python -m unittest discover tests/

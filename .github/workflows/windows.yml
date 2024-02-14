@@ -20,7 +20,7 @@ jobs:
         steps:
           - name: Checkout code
             uses: actions/checkout@v3
-      
+
           - name: Install miniconda
             uses: conda-incubator/setup-miniconda@v2
             with:
@@ -31,7 +31,6 @@ jobs:
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
                 pip install --user -r requirements_dev.txt
-                pip install .
           - name: Test with pytest
             run: |
                 python -m unittest discover test/
