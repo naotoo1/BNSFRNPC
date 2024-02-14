@@ -31,7 +31,7 @@ jobs:
                   pip install --user -r requirements_dev.txt
             - name: Module-TEST
               run: |
-                  python -m unittest discover tests/
+                  python -m unittest discover test/
                   python -m pytest test/
             - name: Train example
               run: |
