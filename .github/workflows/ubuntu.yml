@@ -37,7 +37,7 @@ jobs:
                   python -m pytest test/
             - name: Train example
               run: |
-                python train.py --data_name cifar10 --model iglvq --train_norm lpips-l2 --test_norm l1 --feature_extraction --prune --prune_mode easy --prune_fraction 0.8 --max_epochs 1000
+                python train.py --data_name cifar10 --model iglvq --train_norm lpips-l2 --test_norm l1 --feature_extraction --prune --prune_mode easy --prune_fraction 0.8
                 
           
 
