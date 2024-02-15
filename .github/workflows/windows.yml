@@ -20,7 +20,8 @@ jobs:
         steps:
           - name: Checkout code
             uses: actions/checkout@v3
-
+            with:
+                lfs: true
           - name: Install miniconda
             uses: conda-incubator/setup-miniconda@v2
             with:
@@ -37,7 +38,7 @@ jobs:
                 python -m pytest test/
           - name: Train example
             run: |
-                python train.py --data_name cifar10 --model iglvq --train_norm lpips-l2 --test_norm l2 --feature_extraction --prune --prune_mode easy --prune_fraction 0.8
+                python train.py --data_name cifar10 --model iglvq --train_norm lpips-l2 --test_norm l1 --feature_extraction --prune --prune_mode easy --prune_fraction 0.8
                 
           
           
