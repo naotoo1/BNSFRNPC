@@ -1,5 +1,5 @@
 """Test Suite for Perceptual metric"""
-
+import torch
 from distance import lpips_distance
 from train_utils import get_data, Dataset
 
