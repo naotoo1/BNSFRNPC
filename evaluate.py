@@ -45,7 +45,7 @@ def get_lowerbound_certification(
     condition1 = q_norm in ["lpips-linf", "lpips-l2", "lpips-l1"]
     match condition1:
         case True:
-            device = "cuda"
+            device ="cuda" if torch.cuda.is_available() else  "cpu"
         case False:
             device = "cpu"
 
@@ -105,7 +105,7 @@ def get_upperbound_certification(
     condition1 = q_norm in ["lpips-linf", "lpips-l2", "lpips-l1"]
     match condition1:
         case True:
-            device = "cuda"
+           device ="cuda" if torch.cuda.is_available() else  "cpu"
         case False:
             device = "cpu"
 
