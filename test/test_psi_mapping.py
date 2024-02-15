@@ -38,9 +38,17 @@ class TestPSI(unittest.TestCase):
                 torch.sqrt(torch.sum(feature_layer**2, dim=1, keepdim=True))
                 + self.epsilon
             )
-            self.assertIsInstance(
+            if torch.cuda.is_available():
+                self.assertIsInstance(
                 normalization_factor_1[0][0][0][0], torch.cuda.FloatTensor
-            )
+                )
+            else:
+                self.assertIsInstance(
+                normalization_factor_1[0][0][0][0], torch.FloatTensor
+                )
+            # self.assertIsInstance(
+            #     normalization_factor_1[0][0][0][0], torch.cuda.FloatTensor
+            # )
             self.assertEqual(torch.sum(normalization_factor_1, dim=0).any(), 1)
 
     def test_normalization_factor_2(self):
