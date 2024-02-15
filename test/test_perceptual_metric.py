@@ -9,7 +9,11 @@ access_data = get_data(
     test_size=0.3,
 )
 x_test = access_data.X_test
-x_test = x_test.to("cuda")
+if torch.cuda.is_available():
+    x_test = x_test.to("cuda")
+else:
+    x_test = x_test.to(torch.device("cpu"))
+# x_test = x_test.to("cuda")
 
 
 input_0 = x_test[0].reshape(1, 32, 32, 3)
