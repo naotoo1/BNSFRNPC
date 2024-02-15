@@ -13,7 +13,11 @@ model = _get_lpips_model()
 
 # get image data
 access_data = get_data(dataset="cifar10", test_size=0.3)
-x_test = access_data.X_test.to("cuda")
+if torch.cuda.is_available():
+    x_test = access_data.X_test.to("cuda")
+else:
+    x_test = access_data.X_test.to(torch.device("cpu"))
+# x_test = access_data.X_test.to("cuda")
 
 # reshape the input
 input_0 = x_test[0].reshape(1, 32, 32, 3)
