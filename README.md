@@ -34,7 +34,7 @@ pip install -r requirements.txt
 To replicate percetual-pruning and perceptual-training for cifar-10 run:
 ```python
 python train.py --data_name cifar10 --model iglvq --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode easy --prune_fraction 0.8 
-python train.py --data_name cifar10 --model igtlvq --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode hard --prune_fraction 0.2  
+python train.py --data_name cifar10 --model iglvq --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode hard --prune_fraction 0.2  
 ```
 
 Users interested in replicating the results in the paper can run with the reported parematers in the paper by using:
