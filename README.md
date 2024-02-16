@@ -33,14 +33,16 @@ To install the Python requirements use the following command:
 ```python
 pip install -r requirements.txt 
 ```
-
+## Pruning, Robustification and Certification
 To replicate SSL-pruning and training for mnist run:
 ```python
 python train.py --dataset mnist --model iglvq --train_norm l2 --test_norm l2 --prune --prune_mode easy --prune_fraction 0.8 
-python train.py --dataset mnist --model igtlvq --train_norm l2 --test_norm l2 --prune --prune_mode hard --prune_fraction 0.2
+python train.py --dataset mnist --model iglvq --train_norm l2 --test_norm l2 --prune --prune_mode hard --prune_fraction 0.2
+
+python train.py --dataset mnist --model igtlvq --train_norm l2 --test_norm l2 --prune --prune_mode easy --prune_fraction 0.8
+python train.py --dataset mnist --model igtlvq --train_norm l2 --test_norm l2 --prune --prune_mode hard --prune_fraction 0.2 
 ```
-
-
+## Perceptual-Metric Pruning, Robustification and Certification
 To replicate percetual SSL-pruning and perceptual-training for cifar-10 run:
 ```python
 python train.py --dataset cifar10 --model iglvq --train_norm lpips-l2 --test_norm l2  --feature_extraction --prune --prune_mode easy --prune_fraction 0.8 
@@ -57,9 +59,10 @@ usage: train.py [-h] [--model MODEL] [--data_name DATASET] [--test_size TEST_SIZ
                 [--feature_extraction] [--prune] [--max_epochs MAX_EPOCHS] [--proto_lr PROTO_LR] [--omega_lr OMEGA_LR]
                 [--noise NOISE]
 ```
-
-To do post-training evaluation with pretained-models:
+## Robustness Evaluation
+The evaluate_script.py generates reports on Clean Test Error (CTE), Lower Bound on the Robust Test Error (LRTE), and Upper Bonund on the Robust Test Error (URTE) 
+for a specified NPC. It is tailored for utilization on either newly trained models or pre-trained models. It features multiple parameters, with default values contingent upon other parameters. 
+To illustrate an example of post-training robustness evaluation with a pre-trained, run:
 ```python
-usage: evaluate_script.py [-h] [--model MODEL] [--dataset DATASET] [--test_size TEST_SIZE] [--p_norm P_NORM]
-                          [--metric METRIC] [--epsilon EPSILON] [--train_norm TRAIN_NORM]
+python evaluate_script.py --model iglvq --dataset cifar10 --train_norm lpips-l2 --epsilon 0.1412 --test_size 0.2 --p_norm l2
 ```
