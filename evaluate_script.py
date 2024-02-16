@@ -4,6 +4,7 @@ from dataclasses import dataclass
 import numpy as np
 import torch
 from prototorch.core import lpnorm_distance
+from distance import lpips_distance
 from evaluate import (
     get_lowerbound_certification,
     LowerBoundRTM,
@@ -49,6 +50,12 @@ class LPN:
                 return lpnorm_distance(x, y, np.inf)
             case LPNorms.L1:
                 return lpnorm_distance(x, y, 1)
+            case "lpips-l2":
+                return lpips_distance(x, y, "l2")  # stable version
+            case "lpips-l1":
+                return lpips_distance(x, y, "l1")
+            case "lpips-linf":
+                return lpips_distance(x, y, "linf")
             case _:
                 raise NotImplementedError(
                     "get_lpnorms:none of the cases did match",
@@ -119,6 +126,7 @@ class EER:
 
 if __name__ == "__main__":
     seed_everything(seed=4)
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, required=False)
     parser.add_argument(
@@ -178,6 +186,5 @@ if __name__ == "__main__":
                 f"{Metric.LRTE.value} = {robust_evaluation.evaluate_empirical_robustness_lb.LRTE}",
                 f"{Metric.URTE.value} = {robust_evaluation.evaluate_empirical_robustness_ub}",
             )
-
         case _:
             raise NotImplementedError("metric:none of the cases match")
