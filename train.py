@@ -67,7 +67,7 @@ class TrainModelSummary:
 def train_rnpc(
     input_data: np.ndarray | torch.Tensor,
     labels: np.ndarray | torch.Tensor,
-    data_name: str,
+    dataset: str,
     model_name: str,
     optimal_search: str,
     num_prototypes: int = 1,
@@ -96,7 +96,7 @@ def train_rnpc(
     )
     num_classes = len(torch.unique(labels))
     condition = model_name == RNPC.GLVQ.value
-    match (data_name, condition):
+    match (dataset, condition):
         case (Dataset.CIFAR10, False):
             input_dim = input_data.shape[-2]
             latent_dim = input_data.shape[-2]
@@ -158,10 +158,10 @@ def train_rnpc(
     match model_name:
         case RNPC.IGTLVQ:
             omega_matrix.append(model.omega_matrix)
-            saved_model_dir = f"./weight_folder/{data_name}/{model_name}"
+            saved_model_dir = f"./weight_folder/{dataset}/{model_name}"
         case _:
             saved_model_dir = (
-                f"./weight_folder/{data_name}/{lp_norm}_trained/{model_name}"
+                f"./weight_folder/{dataset}/{lp_norm}_trained/{model_name}"
             )
 
     if save_model:
@@ -372,7 +372,7 @@ if __name__ == "__main__":
     seed_everything(seed=4)
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", type=str, required=False)
-    parser.add_argument("--data_name", type=str, required=False)
+    parser.add_argument("--dataset", type=str, required=False)
     parser.add_argument("--test_size", type=float, required=False, default=0.2)
     parser.add_argument(
         "--train_norm", type=str, required=False, default=LPNorms.LINF.value
@@ -401,7 +401,7 @@ if __name__ == "__main__":
     parser.add_argument("--noise", type=float, required=False, default=0)
 
     model = parser.parse_args().model
-    data_name = parser.parse_args().data_name
+    dataset= parser.parse_args().dataset
     train_norm = parser.parse_args().train_norm
     test_norm = parser.parse_args().test_norm
     test_size = parser.parse_args().test_size
@@ -421,7 +421,7 @@ if __name__ == "__main__":
     omega_lr = parser.parse_args().omega_lr
     noise = parser.parse_args().noise
 
-    match (data_name, test_epsilon):
+    match (dataset, test_epsilon):
         case (Dataset.MNIST, None):
             test_epsilon = 0.3
         case (Dataset.CIFAR10, None):
@@ -433,14 +433,14 @@ if __name__ == "__main__":
         case _:
             raise NotImplementedError
 
-    access_data = get_data(dataset=data_name, test_size=test_size)
+    access_data = get_data(dataset=dataset, test_size=test_size)
     x_train, y_train = access_data.X_train, access_data.y_train
     x_test, y_test = access_data.X_test, access_data.y_test
 
     match prune:
         case True:
             pruned_results = get_prunning(
-                dataset=data_name,
+                dataset=dataset,
                 input_features=x_train,
                 input_labels=y_train,
                 ssl_type=ssl_metric,
@@ -457,12 +457,12 @@ if __name__ == "__main__":
 
     tabular_data = [Dataset.BREASTCANCER.value, Dataset.COD_RNA.value]
     omega_matrix_initializer = (
-        omega_matrix_initializer if data_name in tabular_data else "PCALTI"
+        omega_matrix_initializer if dataset in tabular_data else "PCALTI"
     )
     learner = train_rnpc(
         input_data=x_train,
         labels=y_train,
-        data_name=data_name,
+        dataset=dataset,
         model_name=model,
         optimal_search=device,
         lp_norm=train_norm,
