@@ -1,7 +1,7 @@
 numpy
 scikit-learn
 torch
-pytorch-lightning==2.0.2
+pytorch-lightning==2.4.0
 prototorch==0.7.6
 prototorch_models==0.7.1
 foolbox
